@@ -43,7 +43,7 @@ export default {
   },
   methods: {
     login() {
-      this.$router.push('/about')
+      this.$router.push('/dashboard')
     }
   }
 }
