@@ -17,17 +17,14 @@
       been the industry's standard dummy
     </p>
 
-     <div class="buttons">
-      <b-button size="is-medium" class="is-success"
-        icon-left="phone">
-        Login dengan telepon
+      <div>
+       <b-button variant="outline-info" class="mr-4">
+        <b-icon icon="telephone" aria-hidden="true"></b-icon> Login dengan telepon
+      </b-button> 
+        <b-button variant="outline-info" @click="login()">
+        <b-icon icon="envelope" aria-hidden="true"></b-icon> Login dengan Google
       </b-button>
-
-      <b-button size="is-medium" icon-left="google" @click="login">
-        Login dengan Google
-      </b-button>
-
-    </div>
+      </div>
     </div>
   </div>
 </template>

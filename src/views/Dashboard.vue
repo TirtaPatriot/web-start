@@ -2,34 +2,16 @@
   <div id="dashboard">
     <atas></atas>
     <doremi>
-      <div class="columns">
-        <div class="column">
-          <div class="card">
-          <div class="card-content">
-            <div class="judul">Total Responden </div>
-            <div class="angka">52</div>
-          </div>
-        </div>
-        </div>
+      <b-row>
+        <b-col v-for="(c, i) of cards" :key="i">
+          <b-card :title="c.title">
+            <b-card-text class="card-content">
+              {{ c.total }}
+            </b-card-text>
 
-        <div class="column">
-          <div class="card">
-          <div class="card-content">
-            <div class="judul">Minat </div>
-            <div class="angka">52</div>
-          </div>
-        </div>
-        </div>
-
-        <div class="column">
-          <div class="card">
-          <div class="card-content">
-            <div class="judul">Tidak Minat </div>
-            <div class="angka">52</div>
-          </div>
-        </div>
-        </div>
-      </div>
+          </b-card>
+        </b-col>
+      </b-row>
     </doremi>
     <!-- <h1>Dashboard</h1> -->
   </div>
@@ -43,22 +25,31 @@ export default {
   components: {
     atas: Atas,
     doremi: Doremi
+  },
+  data () {
+    return {
+      cards: [
+        {title: 'Total Responden', total: 52},
+        {title: 'Minat', total: 22},
+        {title: 'Tidak Minat', total: 30}
+      ]
+    }
   }
 }
 </script>
 
 <style>
+.navbar {
+  height: 80px;
+}
 header {
   background-color: rgb(80, 165, 199);
   color: white;
   height: 60px;
 }
 
-.card .card-content .judul {
-  
-}
-
-.card .card-content .angka {
+.card-content {
   font-size: 44px;
+  text-align: right;
 }
 </style>
