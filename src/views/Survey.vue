@@ -22,6 +22,7 @@
             ></b-form-input>
             <b-input-group-append>
               <b-button :disabled="!filter" @click="filter = ''">Clear</b-button>
+              <b-button to="/survey/baru">Add</b-button>
             </b-input-group-append>
           </b-input-group>
         </b-form-group>
@@ -47,6 +48,7 @@
 <script>
 import Atas from "../components/Atas.vue";
 import Doremi from "../components/Doremi.vue";
+// import { surveyDb } from '../plugins/db'
 
 export default {
   components: {
@@ -76,6 +78,9 @@ export default {
         this.loading = false;
       });
   },
+  methods: {
+    add() {}
+  }
 };
 </script>
 
