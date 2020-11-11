@@ -41,6 +41,24 @@
           <strong>Loading...</strong>
         </div>
       </template>
+
+      <template #cell(actions)="row">
+        
+        <b-button size="sm" variant="primary" class="mr-2" @click="show(row)">
+          <b-icon icon="eye" aria-label="Show"></b-icon>
+        </b-button>
+      
+        <b-button size="sm" variant="danger">
+          <b-icon icon="trash" aria-label="Delete" @click="remove(row)"></b-icon>
+        </b-button>
+<!--         
+        <b-button size="sm" @click="info(row.item, row.index, $event.target)" class="mr-1">
+          Show
+        </b-button>
+        <b-button size="sm" @click="row.toggleDetails">
+          {{ row.detailsShowing ? 'Hide' : 'Show' }} Details
+        </b-button> -->
+      </template>
     </b-table>
   </div>
 </template>
@@ -64,6 +82,7 @@ export default {
         { key: "nama", sortable: true },
         { key: "tanggal", sortable: true },
         { key: "minat", sortable: true },
+        { key: 'actions', label: 'Actions' }
       ],
       title: "Data Survey Minat Pemasangan Air PDAM",
       users: [],
@@ -83,7 +102,18 @@ export default {
     })
   },
   methods: {
-    add() {}
+    show(row) {
+      this.$router.push('/survey/'+ row.item._id)
+      console.log('going to show', row)
+    },
+    
+    remove(row) {
+      console.log('going to remove', row.item)
+      surveyDb.remove(row.item._id, row.item._rev).then(() => {
+        const pos = this.users.findIndex(user => user._id === row.item._id)
+        this.users.splice(pos, 1)
+      })
+    },
   }
 };
 </script>

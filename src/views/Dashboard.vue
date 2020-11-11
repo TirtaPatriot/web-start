@@ -20,6 +20,7 @@
 <script>
 import Atas from '../components/Atas.vue'
 import Doremi from '../components/Doremi.vue'
+import {surveyDb} from '../plugins/db'
 
 export default {
   components: {
@@ -34,6 +35,23 @@ export default {
         {title: 'Tidak Minat', total: 30}
       ]
     }
+  },
+  mounted() {
+    surveyDb.allDocs().then(result => {
+      this.cards[0].total = result.total_rows
+    })
+
+    surveyDb.find({
+      selector: {minat: 'Y'}
+    }).then(result => {
+      this.cards[1].total = result.docs.length
+    })
+
+    surveyDb.find({
+      selector: {minat: 'N'}
+    }).then(result => {
+      this.cards[2].total = result.docs.length
+    })
   }
 }
 </script>

@@ -5,6 +5,7 @@ import About from '../views/About.vue'
 import Dashboard from '../views/Dashboard.vue'
 import Survey from '../views/Survey.vue'
 import SurveyBaru from '../views/SurveyBaru.vue'
+import SurveyDetail from '../views/SurveyDetail.vue'
 
 Vue.use(VueRouter)
 
@@ -28,6 +29,10 @@ const routes = [
   {
     path: '/survey/baru',
     component: SurveyBaru
+  },
+  {
+    path: '/survey/:id',
+    component: SurveyDetail
   }
 ]
 
