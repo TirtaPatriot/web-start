@@ -50,8 +50,8 @@
 
             <b-col>
               <b-form-group
-                id="input-group-4"
-                label-for="input-4"
+                id="input-group-5"
+                label-for="input-5"
                 label="Klasifikasi"
               >
                 <b-form-select
@@ -164,6 +164,7 @@
       </tab-content>
       <tab-content title="Selesai">
         {{form}}
+         <input type="file" accept="image/*" capture @change="taken">
       </tab-content>
     </form-wizard>
   </div>
@@ -209,6 +210,7 @@ export default {
         { text: "Sendiri", value: "sendiri" },
         { text: "Sewa", value: "sewa" },
       ],
+      geolocation: {},
       form: {
         nama: "",
         tanggal: new Date(),
@@ -218,13 +220,43 @@ export default {
         minat: 1,
         klasifikasi: null,
       },
+      foto: null
     };
   },
+  mounted() {
+     navigator.geolocation.getCurrentPosition(
+        success => {
+          this.geolocation = {
+            lat: success.coords.latitude,
+            lon: success.coords.longitude
+          }
+        },
+        error => {
+          console.warn(error)
+        }, 
+        {
+          enableHighAccuracy: true
+        }
+      );
+  },
   methods: {
+    taken(e) {
+      this.foto = e.target.files[0]
+    },
     simpan() {
       const dataToSave = {
         _id: 'survey.test.'+Math.random(),
-        ...this.form
+        ...this.form,
+        ...this.geolocation,
+      }
+
+      if (this.foto) {
+        dataToSave._attachments = {
+          [this.foto.name]: {
+            content_type: this.foto.type,
+            data: this.foto
+          }
+        }
       }
 
       surveyDb.put(dataToSave).then(() => {
