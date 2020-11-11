@@ -48,7 +48,7 @@
 <script>
 import Atas from "../components/Atas.vue";
 import Doremi from "../components/Doremi.vue";
-// import { surveyDb } from '../plugins/db'
+import { surveyDb } from '../plugins/db'
 
 export default {
   components: {
@@ -61,9 +61,9 @@ export default {
       filter: null,
       // fields: ['id', 'name', 'email'],
       fields: [
-        { key: "id", sortable: true },
-        { key: "name", sortable: true },
-        { key: "email", sortable: true },
+        { key: "nama", sortable: true },
+        { key: "tanggal", sortable: true },
+        { key: "minat", sortable: true },
       ],
       title: "Data Survey Minat Pemasangan Air PDAM",
       users: [],
@@ -71,12 +71,16 @@ export default {
   },
   mounted() {
     this.loading = true;
-    fetch("https://jsonplaceholder.typicode.com/users")
-      .then((response) => response.json())
-      .then((json) => {
-        this.users = json;
-        this.loading = false;
-      });
+    surveyDb.allDocs({
+      include_docs: true
+    }).then(result => {
+      const data = result.rows.map((isi) => {
+        return isi.doc
+      })
+
+      this.users = data
+      this.loading = false
+    })
   },
   methods: {
     add() {}

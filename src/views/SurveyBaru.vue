@@ -1,33 +1,36 @@
 <template>
   <div class="survey-baru">
-    <form-wizard @on-complete="simpan">
+        <atas></atas>
+    <doremi>
+      <h1 class="survey">Formulir</h1>
+    </doremi>
+
+    <form-wizard @on-complete="simpan" title="" subtitle="">
       <tab-content title="Biodata">
         <b-form>
           <b-row>
             <b-col>
               <b-form-group label="Nama" id="input-group-1" label-for="input-1">
                 <b-form-input
+                autofocus
                   id="input-1"
                   v-model="form.nama"
                   type="text"
                   required
+                  autocomplete="off"
                   placeholder="Isi nama"
                 ></b-form-input>
               </b-form-group>
             </b-col>
             <b-col>
+              
               <b-form-group
                 label="Tanggal"
                 id="input-group-1"
                 label-for="input-1"
               >
-                <b-form-input
-                  id="input-1"
-                  v-model="form.tanggal"
-                  type="text"
-                  required
-                  placeholder="Tanggal"
-                ></b-form-input>
+              <b-form-datepicker placeholder="Tanggal input" locale="id" id="example-datepicker" v-model="form.tanggal"></b-form-datepicker>
+
               </b-form-group>
             </b-col>
           </b-row>
@@ -83,9 +86,11 @@
               >
                 <b-form-input
                   id="input-1"
+                  type="number"
                   v-model="form.penghuni"
-                  type="text"
                   required
+                  autocomplete="off"
+                  min="1"
                   placeholder="Jml. Penghuni"
                 ></b-form-input>
               </b-form-group>
@@ -128,39 +133,31 @@
       <tab-content title="Kuisioner">
         <ol>
           <li>
-            Bagaimana dengan kualitas air yang sedang di gunakan saat ini ?
-            <b-form-group label="">
+            <b-form-group label="Bagaimana dengan kualitas air yang sedang di gunakan saat ini ?">
               <b-form-radio-group
                 v-model="form.kualitas"
-                name="radio-sub-component"
-              >
-                <b-form-radio value="Y">Baik</b-form-radio>
-                <b-form-radio value="N">Tidak Baik</b-form-radio>
-              </b-form-radio-group>
+                :options="baikOptions"
+                name="kualitas"
+              ></b-form-radio-group>
             </b-form-group>
           </li>
-          <li>
-            Apakah di wilayah Bapak/Ibu saat ini sudah di lewati pipa PDAM ?
-            <b-form-group label="">
+          <li>            
+            <b-form-group label="Apakah di wilayah Bapak/Ibu saat ini sudah di lewati pipa PDAM ?">
               <b-form-radio-group
                 v-model="form.cakupan"
-                name="radio-sub-component"
-              >
-                <b-form-radio value="Y">Sudah</b-form-radio>
-                <b-form-radio value="N">Belum</b-form-radio>
-              </b-form-radio-group>
+                :options="sudahOptions"
+                name="cakupan"
+              ></b-form-radio-group>
             </b-form-group>
           </li>
           <li>
-            Apakah Bapak/Ibu berminat menjadi pelanggan PDAM ?
-<b-form-group label="">
+            
+            <b-form-group label="Apakah Bapak/Ibu berminat menjadi pelanggan PDAM ?">
               <b-form-radio-group
                 v-model="form.minat"
-                name="radio-sub-component"
-              >
-                <b-form-radio value="Y">Ya</b-form-radio>
-                <b-form-radio value="N">Tidak</b-form-radio>
-              </b-form-radio-group>
+                :options="yaOptions"
+                name="minat"
+              ></b-form-radio-group>
             </b-form-group>
           </li>
         </ol>
@@ -174,10 +171,28 @@
 
 <script>
 import {surveyDb} from '../plugins/db'
+import Atas from "../components/Atas.vue";
+import Doremi from "../components/Doremi.vue";
 
 export default {
+  components: {
+    Atas, Doremi
+  },
   data() {
     return {
+      baikOptions: [
+        { text: 'Baik', value: 'B' },
+        { text: 'Tidak', value: 'T' },
+        { text: 'Kurang', value: 'K' },
+      ],
+      sudahOptions: [
+        { text: 'Sudah', value: 1 },
+        { text: 'Belum', value: 0 }
+      ],
+      yaOptions: [
+        { text: 'Ya', value: 1 },
+        { text: 'Tidak', value: 0 }
+      ],
       genderOptions: [
         { text: "Pria", value: "L" },
         { text: "Wanita", value: "P" },
@@ -196,11 +211,11 @@ export default {
       ],
       form: {
         nama: "",
-        tanggal: "",
+        tanggal: new Date(),
         gender: null,
-        kualitas: 'Y',
-        cakupan: 'Y',
-        minat: 'Y',
+        kualitas: 'B',
+        cakupan: 1,
+        minat: 1,
         klasifikasi: null,
       },
     };
@@ -211,7 +226,10 @@ export default {
         _id: 'survey.test.'+Math.random(),
         ...this.form
       }
-      surveyDb.put(dataToSave)
+
+      surveyDb.put(dataToSave).then(() => {
+        this.$router.push('/survey')
+      })
     }
   }
 };
